@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Single Movie Test</title>
+  <style>
+    body { font-family: Arial; background:#111; color:#fff; text-align:center; padding:20px; }
+    .card { display:inline-block; padding:16px; background:#222; border-radius:10px; }
+    img { max-width:300px; border-radius:8px; }
+  </style>
+</head>
+<body>
+  <h1>OMDb Single Movie Test</h1>
+  <div id="result">Loading…</div>
+
+  <script>
+    // Replace with your API key if different
+    const apiKey = "ea8ffa3b";
+    const imdbID = "tt3896198"; // Guardians of the Galaxy Vol. 2
+
+    fetch(`https://www.omdbapi.com/?i=${imdbID}&apikey=${apiKey}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.Response === "False") {
+          document.getElementById('result').textContent = "Error: " + data.Error;
+          return;
+        }
+        document.getElementById('result').innerHTML = `
+          <div class="card">
+            <h2>${data.Title} (${data.Year})</h2>
+            <img src="${data.Poster !== 'N/A' ? data.Poster : ''}" alt="Poster">
+            <p><b>Released:</b> ${data.Released}</p>
+            <p><b>IMDB Rating:</b> ${data.imdbRating}</p>
+            <p style="max-width:320px; text-align:left;">${data.Plot}</p>
+          </div>
+        `;
+      })
+      .catch(err => {
+        document.getElementById('result').textContent = "Fetch error: " + err;
+      });
+  </script>
+</body>
+</html>
